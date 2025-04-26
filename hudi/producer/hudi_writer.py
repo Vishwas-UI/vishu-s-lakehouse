@@ -27,9 +27,6 @@ def write_hudi_table(spark: SparkSession, input_parquet_path: str, hudi_output_p
 
     base_path = os.path.abspath(hudi_output_path)
 
-    print(hudi_output_path)
-    print(base_path)
-
     partition_cols = []
     expected_partition_fields = ["year","month"]
 
@@ -52,3 +49,18 @@ def write_hudi_table(spark: SparkSession, input_parquet_path: str, hudi_output_p
     .save(base_path)
 
     print(f"Data written to Hudi table: {hudi_output_path}")
+
+def get_hudi_table_config(hudi_table_path: str) -> dict:
+    properties_path = os.path.join(hudi_table_path, '.hoodie', 'hoodie.properties')
+    if not os.path.exists(properties_path):
+        raise FileNotFoundError(f"hoodie.properties file not found at: {properties_path}")
+
+    config = {}
+    with open(properties_path, 'r') as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith("#"):
+                if '=' in line:
+                    key, value = line.split('=', 1)
+                    config[key.strip()] = value.strip()
+    return config
