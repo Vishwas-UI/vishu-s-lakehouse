@@ -19,7 +19,7 @@ class WeatherAPIReader(BaseAPIReader):
             current = data.get("current_weather",{})
 
             record = {
-                "timestamp": strtotime(current.get("time")),
+                "timestamp": current.get("time"),
                 "temperature": current.get("temperature"),
                 "windspeed": current.get("windspeed"),
                 "winddirection": current.get("winddirection"),

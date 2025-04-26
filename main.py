@@ -24,6 +24,9 @@ def get_short_path_name(long_name):
         else:
             output_buf_size = needed
 
+os.environ["HADOOP_HOME"] = "C:\\hadoop"
+
+
 # Reset JAVA_HOME and SPARK_HOME to short versions
 if "JAVA_HOME" in os.environ:
     os.environ["JAVA_HOME"] = get_short_path_name(os.environ["JAVA_HOME"])
@@ -39,8 +42,8 @@ load_all_readers()
 
 with open(config_path, 'r') as f:
     config = yaml.safe_load(f)
-    spark = SparkSession.builder.appName("hudi").getOrCreate()
-    # spark = hudi_writer.init_spark()
+    # spark = SparkSession.builder.appName("hudi").getOrCreate()
+    spark = hudi_writer.init_spark()
     for api in config['apis']:
         reader = get_reader(api["type"], url=api["url"])
         df = reader.fetch()
