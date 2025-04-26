@@ -1,1 +1,0 @@
-# vishu-s-lakehouse
